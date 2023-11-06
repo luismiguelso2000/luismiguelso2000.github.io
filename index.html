@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Informações de Medicamentos</title>
+    <script>
+        let entryCount = 1;
+
+        function addMedicationEntry() {
+            entryCount++;
+            const newEntry = document.getElementById("medicationEntry").cloneNode(true);
+            newEntry.id = "medicationEntry" + entryCount;
+            newEntry.style.display = "block";
+            newEntry.querySelector("select").selectedIndex = -1; // Reset medication selection
+            newEntry.querySelector("input[type='number']").value = ""; // Reset dosagem
+            newEntry.querySelector("input[type='text']").value = ""; // Reset horas
+            document.getElementById("medicationForm").appendChild(newEntry);
+        }
+
+        function toggleMedicationFields(selectElement) {
+            const benuronFields = selectElement.closest(".medication-entry").querySelector(".benuron-fields");
+            const insulinaFields = selectElement.closest(".medication-entry").querySelector(".insulina-fields");
+
+            if (selectElement.value.includes("benuron")) {
+                benuronFields.style.display = "block";
+            } else {
+                benuronFields.style.display = "none";
+            }
+
+            if (selectElement.value.includes("insulina")) {
+                insulinaFields.style.display = "block";
+            } else {
+                insulinaFields.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+
+<!-- Página para Inserir Informações de Medicamentos -->
+<h1>Informações de Medicamentos</h1>
+<form id="medicationForm" action="processar_dados.php" method="post">
+    <label for="data">Selecione a Data:</label>
+    <input type="date" id="data" name="data" required><br><br>
+
+    <div id="medicationEntry" class="medication-entry">
+        <label for="medicamentos">Selecione os medicamentos:</label>
+        <select name="medicamentos[]" multiple onchange="toggleMedicationFields(this)">
+            <option value="benuron">Benuron</option>
+            <option value="insulina">Insulina</option>
+        </select><br><br>
+
+        <div class="benuron-fields" style="display: none;">
+            <label for="dosagem_benuron">Dosagem do Benuron (vezes ao dia):</label>
+            <input type="number" name="dosagem_benuron" min="1" max="5" required><br><br>
+
+            <label for "horas_benuron">Horas da Dose do Benuron (separadas por vírgula):</label>
+            <input type="text" name="horas_benuron" required><br><br>
+        </div>
+
+        <div class="insulina-fields" style="display: none;">
+            <label for="dosagem_insulina">Dosagem da Insulina (vezes ao dia):</label>
+            <input type="number" name="dosagem_insulina" min="1" max="5" required><br><br>
+
+            <label for="horas_insulina">Horas da Dose da Insulina (separadas por vírgula):</label>
+            <input type="text" name="horas_insulina" required><br><br>
+        </div>
+    </div>
+
+    <button type="button" onclick="addMedicationEntry()">Adicionar outro registro</button><br><br>
+    <input type="submit" value="Registrar Medicamentos">
+</form>
+
+</body>
+</html>
